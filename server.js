@@ -9,16 +9,22 @@ const jwt = require("jsonwebtoken");
 const app = express();
 app.use(express.json());
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
 
 const db = mysql.createPool({
     host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT || 3306),
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    ssl: {
+        rejectUnauthorized: false
+    },
     waitForConnections: true,
     connectionLimit: 10
 });
+
 
 // Verify login token
 function verifyToken(req, res, next) {
